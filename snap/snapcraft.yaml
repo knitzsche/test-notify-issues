@@ -1,0 +1,32 @@
+name: test-notif-issues
+base: core18 
+version: '0.1'
+summary: Test snapcraft systemd watchdog oneshot
+description: |
+  A test.
+
+grade: devel
+confinement: strict
+
+apps:
+  no-notify:
+    daemon: oneshot
+    command: bin/daemon-no-notify
+    plugs: [ daemon-notify ]
+
+  notify-follow:
+    daemon: oneshot
+    command: bin/daemon-notify-follow
+    after: [ notify ]
+
+  notify:
+    daemon: notify
+    command: bin/daemon-notify
+    plugs: [ daemon-notify ]
+
+parts:
+  daemon:
+    source: .
+    plugin: go
+    go-importpath: test-watchdog-oneshot
+    build-packages: [ gcc ]
